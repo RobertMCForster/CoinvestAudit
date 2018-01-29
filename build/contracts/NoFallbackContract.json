@@ -1,0 +1,129 @@
+{
+  "contractName": "NoFallbackContract",
+  "abi": [
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "bytecode": "0x60606040523415600e57600080fd5b603580601b6000396000f3006060604052600080fd00a165627a7a723058204ef60eea449365f3224767d083518dc5418e7150218f9dea878480f081ae0a060029",
+  "deployedBytecode": "0x6060604052600080fd00a165627a7a723058204ef60eea449365f3224767d083518dc5418e7150218f9dea878480f081ae0a060029",
+  "sourceMap": "28:85:4:-;;;63:45;;;;;;;;28:85;;;;;;",
+  "deployedSourceMap": "28:85:4:-;;;;;",
+  "source": "pragma solidity ^0.4.17;\r\n\r\ncontract NoFallbackContract {\r\n\r\n  function NoFallbackContract() public {\r\n\r\n  }\r\n\r\n}",
+  "sourcePath": "G:\\solidity\\RojaxPrivate\\CoinvestAudit\\contracts\\NoFallbackContract.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/G/solidity/RojaxPrivate/CoinvestAudit/contracts/NoFallbackContract.sol",
+      "exportedSymbols": {
+        "NoFallbackContract": [
+          1063
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".17"
+          ]
+        },
+        "id": 1058,
+        "name": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            1063
+          ],
+          "name": "NoFallbackContract",
+          "scope": 1064
+        },
+        "children": [
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": true,
+              "modifiers": [
+                null
+              ],
+              "name": "NoFallbackContract",
+              "payable": false,
+              "scope": 1063,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1059,
+                "name": "ParameterList",
+                "src": "90:2:4"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1060,
+                "name": "ParameterList",
+                "src": "100:0:4"
+              },
+              {
+                "attributes": {
+                  "statements": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1061,
+                "name": "Block",
+                "src": "100:8:4"
+              }
+            ],
+            "id": 1062,
+            "name": "FunctionDefinition",
+            "src": "63:45:4"
+          }
+        ],
+        "id": 1063,
+        "name": "ContractDefinition",
+        "src": "28:85:4"
+      }
+    ],
+    "id": 1064,
+    "name": "SourceUnit",
+    "src": "0:113:4"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-01-29T16:56:03.882Z"
+}
