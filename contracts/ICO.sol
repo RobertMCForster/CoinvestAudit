@@ -143,8 +143,13 @@ contract ICO is Ownable {
         token.transfer(msg.sender, token.balanceOf(this));
     }
     
+    /**
+     * @dev Used externally to check the address of the Coinvest token.
+     * @return Address of the Coinvest token. 
+    **/
     function tokenAddress() 
-    external view
+      external 
+      view
     returns (address)
     {
         return address(token);
