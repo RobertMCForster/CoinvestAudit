@@ -75,6 +75,7 @@ contract ICO is Ownable {
         require(msg.value >= min_contribution);
         require((block.number < end_block) && (block.number >= start_block));
         require(buyers[msg.sender] < max_contribution);
+        require(tx.gasprice <= 50 * (10 ** 9));
 
         uint256 refundAmount = 0;
         uint256 etherAmount = msg.value;
