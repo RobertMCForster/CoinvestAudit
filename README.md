@@ -2,8 +2,7 @@
 
 Current Coinvest token and crowdsale contracts with associated truffles.
 
-<h2>Requirements for the ICO.sol contract</h2>:
-
+<h2>Requirements for the ICO.sol contract:</h2>
 Ability to distribute 52.5 million tokens (manually transferred to contract).
 No address should be able to buy more than 50 Ether worth of tokens.
 A user should not be able to purchase less than 0.001 Ether worth of tokens.
