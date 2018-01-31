@@ -250,8 +250,8 @@ contract('ICO', function ([_, wallet]) {
             await this.icoContract.purchase(this.accountFour, { value: toEther(1), from: this.accountFour }).should.be.rejectedWith(EVMRevert);
         })
 
-        it('Ensure user cannot purchase less than 0.001 Ether worth of tokens.', async function () {
-            await this.icoContract.purchase(this.accountTwo, { value: toEther(0.0001), from: this.accountTwo }).should.be.rejectedWith(EVMRevert);
+        it('Ensure user cannot purchase less than 0.01 Ether worth of tokens.', async function () {
+            await this.icoContract.purchase(this.accountTwo, { value: toEther(0.001), from: this.accountTwo }).should.be.rejectedWith(EVMRevert);
         })
 
     })
