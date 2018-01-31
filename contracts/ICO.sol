@@ -6,7 +6,7 @@ contract ICO is Ownable {
     CoinvestToken token;
     
     uint256 public max_contribution = 50 ether; // Whale protection: 50 ETH max deposit
-    uint256 public min_contribution = 1 ether / 1000; // Minnow protection: 0.001 ETH min deposit
+    uint256 public min_contribution = 1 ether / 100; // Minnow protection: 0.01 ETH min deposit
     
     uint256 public start_block; // Starting block of the crowdsale, accepts funds ON this block
     uint256 public end_block; // Ending block of the crowdsale, no funds accepted on or after this block.
