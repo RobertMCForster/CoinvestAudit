@@ -6,7 +6,7 @@ contract ICO is Ownable {
     CoinvestToken token;
     
     uint256 public max_contribution = 50 ether; // Whale protection: 50 ETH max deposit
-    uint256 public min_contribution = 1 ether / 100; // Minnow protection: 0.01 ETH min deposit
+    uint256 public min_contribution = 1 ether / 1000; // Minnow protection: 0.001 ETH min deposit
     
     uint256 public start_block; // Starting block of the crowdsale, accepts funds ON this block
     uint256 public end_block; // Ending block of the crowdsale, no funds accepted on or after this block.
@@ -73,16 +73,16 @@ contract ICO is Ownable {
     {
         require(token.balanceOf(address(this)) > 0);
         require(msg.value >= min_contribution);
-        require((block.number < end_block) && (block.number >= start_block));
         require(buyers[msg.sender] < max_contribution);
+        require((block.number < end_block) && (block.number >= start_block));
         require(tx.gasprice <= 50 * (10 ** 9));
 
         uint256 refundAmount = 0;
         uint256 etherAmount = msg.value;
         // If buyer is trying to buy more than their limit...
         if (buyers[msg.sender] + etherAmount > max_contribution) {
-            etherAmount = (buyers[msg.sender] + etherAmount) - max_contribution;
-            refundAmount = msg.value - etherAmount;
+            refundAmount = (buyers[msg.sender] + etherAmount) - max_contribution;
+            etherAmount = msg.value - refundAmount;
         }
 
         uint256 tokens_bought = etherAmount * price;
@@ -92,11 +92,11 @@ contract ICO is Ownable {
             refundAmount += etherAmount - (token.balanceOf(address(this)) / price);
             etherAmount = etherAmount - refundAmount;
             
-            _beneficiary.transfer(refundAmount);
+            msg.sender.transfer(refundAmount);
             tokens_bought = token.balanceOf(address(this));
         // If buyer has paid too much but did not buy the rest of the tokens...
         } else if (refundAmount > 0) {
-            _beneficiary.transfer(refundAmount);
+            msg.sender.transfer(refundAmount);
         }
         
         buyers[msg.sender] += etherAmount;
@@ -141,6 +141,21 @@ contract ICO is Ownable {
         require(block.number >= end_block);
         
         token.transfer(msg.sender, token.balanceOf(this));
+    }
+
+    /**
+     * @dev Allow the owner to take ERC20 tokens off of this contract if they are accidentally sent.
+    **/
+    function token_escape(address _tokenContract)
+      external
+      onlyOwner
+    {
+        require(_tokenContract != address(token));
+        
+        CoinvestToken lostToken = CoinvestToken(_tokenContract);
+        
+        uint256 stuckTokens = lostToken.balanceOf(address(this));
+        lostToken.transfer(owner, stuckTokens);
     }
     
     /**
