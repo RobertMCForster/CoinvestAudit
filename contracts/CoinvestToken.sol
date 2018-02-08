@@ -9,9 +9,9 @@ contract ContractReceiver {
 } 
 
  /**
- * ERC23 token by Dexaran
+ * ERC223 token by Dexaran
  *
- * https://github.com/Dexaran/ERC23-tokens
+ * https://github.com/Dexaran/ERC223-tokens
  */
  
  
@@ -59,8 +59,8 @@ contract CoinvestToken is SafeMath {
     string public constant symbol = "COIN";
     string public constant name = "Coinvest";
     
-    uint256 public constant decimals = 18;
-    uint256 _totalSupply = 107142857 * (10 ** 18);
+    uint8 public constant decimals = 18;
+    uint256 public _totalSupply = 107142857 * (10 ** 18);
     
     /**
      * @dev Set owner and beginning balance.
@@ -103,7 +103,6 @@ contract CoinvestToken is SafeMath {
         bytes memory empty;
         return transferToAddress(_to, _value, empty);
     }
-  
 
     // Function that is called when a user or another contract wants to transfer funds .
     function transfer(address _to, uint _value, bytes _data) returns (bool success) {
@@ -221,6 +220,19 @@ contract CoinvestToken is SafeMath {
         
         allowed[msg.sender][_spender] = _amount;
         Approval(msg.sender, _spender, _amount);
+    }
+    
+    /**
+     * @dev Allow the owner to take ERC20 tokens off of this contract if they are accidentally sent.
+    **/
+    function token_escape(address _tokenContract)
+      external
+      only_maintainer
+    {
+        CoinvestToken lostToken = CoinvestToken(_tokenContract);
+        
+        uint256 stuckTokens = lostToken.balanceOf(address(this));
+        lostToken.transfer(maintainer, stuckTokens);
     }
 
     /**
