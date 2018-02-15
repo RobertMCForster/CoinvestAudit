@@ -68,7 +68,7 @@ contract CoinvestToken is SafeMath {
     function CoinvestToken()
       public
     {
-        balances[msg.sender] = _totalSupply;
+        balances[msg.sender] = totalSupply;
     }
   
   
