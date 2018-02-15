@@ -60,7 +60,7 @@ contract CoinvestToken is SafeMath {
     string public constant name = "Coinvest";
     
     uint8 public constant decimals = 18;
-    uint256 public _totalSupply = 107142857 * (10 ** 18);
+    uint256 public totalSupply = 107142857 * (10 ** 18);
     
     /**
      * @dev Set owner and beginning balance.
