@@ -41,12 +41,12 @@ contract CoinvestToken is SafeMath {
     
     address public maintainer = msg.sender;
     address public icoContract; // icoContract is needed to allow it to transfer tokens during crowdsale.
-    uint256 public icoEndBlock; // icoEndBlock is needed to determine when users may start transferring.
+    uint256 public lockupEndBlock; // icoEndBlock is needed to determine when users may start transferring.
     
     bool public ERC223Transfer_enabled = false;
     bool public Transfer_data_enabled = false;
     bool public Transfer_nodata_enabled = true;
-    
+
     event Transfer(address indexed from, address indexed to, uint value, bytes data);
     event ERC223Transfer(address indexed from, address indexed to, uint value, bytes data);
     event Transfer(address indexed from, address indexed to, uint value);
@@ -67,12 +67,11 @@ contract CoinvestToken is SafeMath {
     /**
      * @dev Set owner and beginning balance.
     **/
-    function CoinvestToken(address _icoContract, uint256 _icoEndBlock)
+    function CoinvestToken(uint256 _lockupEndBlock)
       public
     {
         balances[msg.sender] = totalSupply;
-        icoContract = _icoContract;
-        icoEndBlock = _icoEndBlock;
+        lockupEndBlock = _lockupEndBlock;
     }
   
   
@@ -242,6 +241,17 @@ contract CoinvestToken is SafeMath {
     }
 
     /**
+     * @dev Allow maintainer to set the ico contract for transferable permissions.
+    **/
+    function setIcoContract(address _icoContract)
+      external
+      only_maintainer
+    {
+        require(icoContract == 0);
+        icoContract = _icoContract;
+    }
+
+    /**
      * @dev Allowed amount for a user to spend of another's tokens.
      * @param _owner The owner of the tokens approved to spend.
      * @param _spender The address of the user allowed to spend the tokens.
@@ -277,7 +287,7 @@ contract CoinvestToken is SafeMath {
     
     modifier transferable
     {
-        if (block.number < icoEndBlock) {
+        if (block.number < lockupEndBlock) {
             require(msg.sender == maintainer || msg.sender == icoContract);
         }
         _;
