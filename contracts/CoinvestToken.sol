@@ -40,6 +40,8 @@ contract SafeMath {
 contract CoinvestToken is SafeMath {
     
     address public maintainer = msg.sender;
+    address public icoContract; // icoContract is needed to allow it to transfer tokens during crowdsale.
+    uint256 public icoEndBlock; // icoEndBlock is needed to determine when users may start transferring.
     
     bool public ERC223Transfer_enabled = false;
     bool public Transfer_data_enabled = false;
@@ -65,15 +67,17 @@ contract CoinvestToken is SafeMath {
     /**
      * @dev Set owner and beginning balance.
     **/
-    function CoinvestToken()
+    function CoinvestToken(address _icoContract, uint256 _icoEndBlock)
       public
     {
         balances[msg.sender] = totalSupply;
+        icoContract = _icoContract;
+        icoEndBlock = _icoEndBlock;
     }
   
   
     // Function that is called when a user or another contract wants to transfer funds .
-    function transfer(address _to, uint _value, bytes _data, string _custom_fallback) returns (bool success) {
+    function transfer(address _to, uint _value, bytes _data, string _custom_fallback) transferable returns (bool success) {
       
         if(isContract(_to)) {
             if (balanceOf(msg.sender) < _value) throw;
@@ -99,13 +103,13 @@ contract CoinvestToken is SafeMath {
         }
     }
 
-    function ERC20transfer(address _to, uint _value, bytes _data) returns (bool success) {
+    function ERC20transfer(address _to, uint _value, bytes _data) transferable returns (bool success) {
         bytes memory empty;
         return transferToAddress(_to, _value, empty);
     }
 
     // Function that is called when a user or another contract wants to transfer funds .
-    function transfer(address _to, uint _value, bytes _data) returns (bool success) {
+    function transfer(address _to, uint _value, bytes _data) transferable returns (bool success) {
         if(isContract(_to)) {
             return transferToContract(_to, _value, _data);
         }
@@ -116,7 +120,7 @@ contract CoinvestToken is SafeMath {
   
     // Standard function transfer similar to ERC20 transfer with no _data .
     // Added due to backwards compatibility reasons .
-    function transfer(address _to, uint _value) returns (bool success) {
+    function transfer(address _to, uint _value) transferable returns (bool success) {
       
         //standard function transfer similar to ERC20 transfer with no _data
         //added due to backwards compatibility reasons
@@ -194,6 +198,7 @@ contract CoinvestToken is SafeMath {
     **/
     function transferFrom(address _from, address _to, uint _amount)
       external
+      transferable
     returns (bool success)
     {
         require(balances[_from] >= _amount && allowed[_from][msg.sender] >= _amount);
@@ -214,6 +219,7 @@ contract CoinvestToken is SafeMath {
     **/
     function approve(address _spender, uint256 _amount) 
       external
+      transferable // Protect from unlikely maintainer-receiver trickery
     {
         require(_amount == 0 || allowed[msg.sender][_spender] == 0);
         require(balances[msg.sender] >= _amount);
@@ -268,4 +274,13 @@ contract CoinvestToken is SafeMath {
         assert(msg.sender == maintainer);
         _;
     }
+    
+    modifier transferable
+    {
+        if (block.number < icoEndBlock) {
+            require(msg.sender == maintainer || msg.sender == icoContract);
+        }
+        _;
+    }
+    
 }
