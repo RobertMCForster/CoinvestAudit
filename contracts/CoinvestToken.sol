@@ -41,7 +41,7 @@ contract CoinvestToken is SafeMath {
     
     address public maintainer = msg.sender;
     address public icoContract; // icoContract is needed to allow it to transfer tokens during crowdsale.
-    uint256 public lockupEndBlock; // icoEndBlock is needed to determine when users may start transferring.
+    uint256 public lockupEndBlock; // lockupEndBlock is needed to determine when users may start transferring.
     
     bool public ERC223Transfer_enabled = false;
     bool public Transfer_data_enabled = false;
