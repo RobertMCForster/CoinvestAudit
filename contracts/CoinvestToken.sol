@@ -39,7 +39,7 @@ contract SafeMath {
  
 contract CoinvestToken is SafeMath {
     
-    address public maintainer = msg.sender;
+    address public maintainer;
     address public icoContract; // icoContract is needed to allow it to transfer tokens during crowdsale.
     uint256 public lockupEndBlock; // lockupEndBlock is needed to determine when users may start transferring.
     
@@ -72,6 +72,7 @@ contract CoinvestToken is SafeMath {
     {
         balances[msg.sender] = totalSupply;
         lockupEndBlock = _lockupEndBlock;
+        maintainer = msg.sender;
     }
   
   
@@ -283,6 +284,15 @@ contract CoinvestToken is SafeMath {
     {
         assert(msg.sender == maintainer);
         _;
+    }
+    
+    /**
+     * @dev Allows the current maintainer to transfer maintenance of the contract to a new maintainer.
+     * @param newMaintainer The address to transfer ownership to.
+     */
+    function transferMaintainer(address newMaintainer) only_maintainer public {
+        require(newMaintainer != address(0));
+        maintainer = newMaintainer;
     }
     
     modifier transferable
