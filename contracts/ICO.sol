@@ -6,11 +6,11 @@ contract ICO is Ownable {
     CoinvestToken token;
     
     uint256 public max_contribution = 50 ether; // Whale protection: 50 ETH max deposit
-    uint256 public min_contribution = 1 ether / 100; // Minnow protection: 0.01 ETH min deposit
+    uint256 public min_contribution = 1 ether / 1000; // Minnow protection: 0.001 ETH min deposit
     
     uint256 public start_block; // Starting block of the crowdsale, accepts funds ON this block
     uint256 public end_block; // Ending block of the crowdsale, no funds accepted on or after this block.
-    uint256 public price; // Amount of tokens to be sent per each WEI(ETH) contributed.
+    uint256 public price; // Amount of token wei to be sent per each eth wei contributed.
 
     mapping (address => uint256) public buyers; // Keeps track of contributions from each address.
     /**
@@ -33,6 +33,7 @@ contract ICO is Ownable {
      * @param _tokenAddress The address of the COIN token.
      * @param _start_block The block that we want the ICO to start (inclusive).
      * @param _end_block The block that we want the ICO to end (exclusive).
+     * @param _price Amount of token wei to be given for each eth wei contributed.
     **/
     function ICO(address _tokenAddress, uint256 _start_block, uint256 _end_block, uint256 _price)
       public
