@@ -221,7 +221,6 @@ contract CoinvestToken is SafeMath {
       external
       transferable // Protect from unlikely maintainer-receiver trickery
     {
-        require(_amount == 0 || allowed[msg.sender][_spender] == 0);
         require(balances[msg.sender] >= _amount);
         
         allowed[msg.sender][_spender] = _amount;
