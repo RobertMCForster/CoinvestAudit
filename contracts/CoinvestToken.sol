@@ -59,14 +59,14 @@ contract CoinvestToken is SafeMath {
   
 
     string public constant symbol = "COIN";
-    string public constant name = "Coinvest";
+    string public constant name = "Coinvest COIN Token";
     
     uint8 public constant decimals = 18;
     uint256 public totalSupply = 107142857 * (10 ** 18);
     
     /**
      * @dev Set owner and beginning balance.
-     * @param _lockUpEndTime The time at which the token may be traded.
+     * @param _lockupEndTime The time at which the token may be traded.
     **/
     function CoinvestToken(uint256 _lockupEndTime)
       public
