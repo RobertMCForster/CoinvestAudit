@@ -41,7 +41,7 @@ contract CoinvestToken is SafeMath {
     
     address public maintainer;
     address public icoContract; // icoContract is needed to allow it to transfer tokens during crowdsale.
-    uint256 public lockupEndBlock; // lockupEndBlock is needed to determine when users may start transferring.
+    uint256 public lockupEndTime; // lockupEndTime is needed to determine when users may start transferring.
     
     bool public ERC223Transfer_enabled = false;
     bool public Transfer_data_enabled = false;
@@ -66,12 +66,13 @@ contract CoinvestToken is SafeMath {
     
     /**
      * @dev Set owner and beginning balance.
+     * @param _lockUpEndTime The time at which the token may be traded.
     **/
-    function CoinvestToken(uint256 _lockupEndBlock)
+    function CoinvestToken(uint256 _lockupEndTime)
       public
     {
         balances[msg.sender] = totalSupply;
-        lockupEndBlock = _lockupEndBlock;
+        lockupEndTime = _lockupEndTime;
         maintainer = msg.sender;
     }
   
@@ -296,7 +297,7 @@ contract CoinvestToken is SafeMath {
     
     modifier transferable
     {
-        if (block.number < lockupEndBlock) {
+        if (block.timestamp < lockupEndTime) {
             require(msg.sender == maintainer || msg.sender == icoContract);
         }
         _;
