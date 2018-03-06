@@ -8,8 +8,8 @@ contract ICO is Ownable {
     uint256 public max_contribution = 50 ether; // Whale protection: 50 ETH max deposit
     uint256 public min_contribution = 1 ether / 100; // Minnow protection: 0.01 ETH min deposit
     
-    uint256 public start_block; // Starting block of the crowdsale, accepts funds ON this block
-    uint256 public end_block; // Ending block of the crowdsale, no funds accepted on or after this block.
+    uint256 public start_time; // Starting time of the crowdsale, accepts funds after this block time
+    uint256 public end_time; // Ending block of the crowdsale, no funds accepted after this time.
     uint256 public price; // Amount of token wei to be sent per each eth wei contributed.
 
     mapping (address => uint256) public buyers; // Keeps track of contributions from each address.
@@ -31,16 +31,16 @@ contract ICO is Ownable {
     /**
      * @dev Initialize contract.
      * @param _tokenAddress The address of the COIN token.
-     * @param _start_block The block that we want the ICO to start (inclusive).
-     * @param _end_block The block that we want the ICO to end (exclusive).
+     * @param _start_time The time we want the ICO to start.
+     * @param _end_time The time that we want the ICO to end.
      * @param _price Amount of token wei to be given for each eth wei contributed.
     **/
-    function ICO(address _tokenAddress, uint256 _start_block, uint256 _end_block, uint256 _price)
+    function ICO(address _tokenAddress, uint256 _start_time, uint256 _end_time, uint256 _price)
       public
     {
         token = CoinvestToken(_tokenAddress);
-        start_block = _start_block;
-        end_block = _end_block;
+        start_time = _start_time;
+        end_time = _end_time;
         price = _price;
     }
 
@@ -75,7 +75,7 @@ contract ICO is Ownable {
         require(token.balanceOf(address(this)) > 0);
         require(msg.value >= min_contribution);
         require(buyers[msg.sender] < max_contribution);
-        require((block.number < end_block) && (block.number >= start_block));
+        require((block.timestamp < end_time) && (block.timestamp >= start_time));
         require(tx.gasprice <= 50 * (10 ** 9));
 
         uint256 refundAmount = 0;
@@ -107,18 +107,18 @@ contract ICO is Ownable {
 
     /**
      * @dev Set the timeframes of the crowdsale.
-     * @param _start_block The block on which the crowdsale will start (inclusive).
-     * @param _end_block The block at which the crowdsale will end (exclusive).
+     * @param _start_time The time at which the crowdsale will start.
+     * @param _end_time The time at which the crowdsale will end.
     **/
-    function set_timeframes(uint256 _start_block, uint256 _end_block) 
+    function set_timeframes(uint256 _start_time, uint256 _end_time) 
       external
       onlyOwner
     {
         // Timeframes may only be changed before the crowdsale begins.
-        require(block.number < start_block);
+        require(block.timestamp < start_time);
         
-        start_block = _start_block;
-        end_block = _end_block;
+        start_time = _start_time;
+        end_time = _end_time;
     }
     
     /**
@@ -139,7 +139,7 @@ contract ICO is Ownable {
       onlyOwner
     {
         // Tokens may only be withdrawn after crowdsale ends.
-        require(block.number >= end_block);
+        require(block.timestamp >= end_time);
         
         token.transfer(msg.sender, token.balanceOf(this));
     }
